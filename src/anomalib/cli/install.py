@@ -62,8 +62,10 @@ def anomalib_install(option: str = "full", verbose: bool = False) -> int:
     if option in ("full", "core") and torch_requirement is not None:
         torch_install_args = get_torch_install_args(torch_requirement)
 
+
     # Combine torch and other requirements.
-    install_args = other_requirements + torch_install_args
+    # install_args = other_requirements + torch_install_args
+    install_args = other_requirements
 
     # Install requirements.
     with console.status("[bold green]Installing packages...  This may take a few minutes.\n") as status:
