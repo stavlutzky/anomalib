@@ -180,3 +180,44 @@ class _VisualizationCallback(Callback):
                     name=_name,
                     global_step=module.global_step,
                 )
+
+class VisualizationCallbackAnomalous(_VisualizationCallback):
+    def on_predict_batch_end(
+        self,
+        trainer: Trainer,
+        pl_module: AnomalyModule,
+        outputs: STEP_OUTPUT | None,
+        batch: Any,  # noqa: ANN401
+        batch_idx: int,
+        dataloader_idx: int = 0,
+    ) -> None:
+        for generator in self.generators:
+            if generator.visualize_on == VisualizationStep.BATCH:
+                for result in generator(
+                    trainer=trainer,
+                    pl_module=pl_module,
+                    outputs=outputs,
+                    batch=batch,
+                    batch_idx=batch_idx,
+                    dataloader_idx=dataloader_idx,
+                ):
+                    if self.save and result.pred_label == 1:
+                        if result.file_name is None:
+                            msg = "``save`` is set to ``True`` but file name is ``None``"
+                            raise ValueError(msg)
+
+                        # Get the filename to save the image.
+                        # Filename is split based on the datamodule name and category.
+                        # For example, if the filename is `MVTec/bottle/000.png`, then the
+                        # filename is split based on `MVTec/bottle` and `000.png` is saved.
+                        if trainer.datamodule is not None:
+                            filename = str(result.file_name).split(
+                                sep=f"{trainer.datamodule.name}/{trainer.datamodule.category}",
+                            )[-1]
+                        else:
+                            filename = Path(result.file_name).name
+                        save_image(image=result.image, root=self.root, filename=filename)
+                    if self.show:
+                        show_image(image=result.image, title=str(result.file_name))
+                    if self.log:
+                        self._add_to_logger(result, pl_module, trainer)

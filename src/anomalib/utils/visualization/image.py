@@ -18,7 +18,7 @@ from anomalib import TaskType
 from anomalib.data.utils import read_image
 from anomalib.utils.post_processing import add_anomalous_label, add_normal_label, draw_boxes, superimpose_anomaly_map
 
-from .base import BaseVisualizer, GeneratorResult, VisualizationStep
+from .base import BaseVisualizer, GeneratorResult, VisualizationStep, GeneratorResultExtended
 
 if TYPE_CHECKING:
     from matplotlib.axis import Axes
@@ -170,7 +170,7 @@ class ImageVisualizer(BaseVisualizer):
                 box_labels=batch["box_labels"][i].cpu().numpy() if "box_labels" in batch else None,
                 normalize=self.normalize,
             )
-            yield GeneratorResult(image=self.visualize_image(image_result), file_name=file_name)
+            yield GeneratorResultExtended(image=self.visualize_image(image_result), file_name=file_name, pred_label=image_result.pred_label, pred_score=image_result.pred_score )
 
     def visualize_image(self, image_result: ImageResult) -> np.ndarray:
         """Generate the visualization for an image.

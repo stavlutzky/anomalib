@@ -23,6 +23,19 @@ class GeneratorResult:
     image: np.ndarray
     file_name: str | Path | None = None
 
+@dataclass
+class GeneratorResultExtended:
+    """Generator result.
+
+    All visualization generators are expected to return this object.
+    It is to ensure that the result is consistent across all generators.
+    """
+
+    image: np.ndarray
+    file_name: str | Path | None = None
+    pred_label: bool | None = None
+    pred_score: float | None = None
+
 
 class VisualizationStep(str, Enum):
     """Identify step on which to generate images."""
