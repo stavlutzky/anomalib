@@ -13,7 +13,8 @@ from lightning.pytorch.utilities.types import STEP_OUTPUT
 
 from anomalib.data.utils import boxes_to_anomaly_maps, boxes_to_masks, masks_to_boxes
 from anomalib.models import AnomalyModule
-
+import os
+import pickle
 
 class _PostProcessorCallback(Callback):
     """Applies post-processing to the model outputs.
@@ -21,8 +22,9 @@ class _PostProcessorCallback(Callback):
     Note: This callback is set within the Engine.
     """
 
-    def __init__(self) -> None:
+    def __init__(self,predict_path=None) -> None:
         super().__init__()
+        self.predict_path = predict_path
 
     def on_validation_batch_end(
         self,
@@ -65,6 +67,32 @@ class _PostProcessorCallback(Callback):
 
         if outputs is not None:
             self.post_process(trainer, pl_module, outputs)
+
+
+        from datetime import datetime
+
+        # Get the current timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+        # Create the file name with the timestamp
+        file_name = f'output_{timestamp}.pkl'
+
+
+        # Define the path and file name
+        full_path = self.predict_path+f'\\{file_name}'
+
+        # Create the directory if it doesn't exist
+        if not os.path.exists(self.predict_path):
+            os.makedirs(self.predict_path)
+            print(f"Directory '{self.predict_path}' created.")
+
+        # Open the file and write data to it
+        with open(full_path, 'wb') as file:
+            pickle.dump(outputs, file)
+            print(f"Data written to '{full_path}'.")
+
+        # with open(full_path, 'rb') as file:
+        #     data = pickle.load(file)
 
     def post_process(self, trainer: Trainer, pl_module: AnomalyModule, outputs: STEP_OUTPUT) -> None:
         if isinstance(outputs, dict):
