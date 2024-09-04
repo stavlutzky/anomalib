@@ -64,6 +64,7 @@ class _PostProcessorCallback(Callback):
         dataloader_idx: int = 0,
     ) -> None:
         del batch, batch_idx, dataloader_idx  # Unused arguments.
+        print("Start Predict")
 
         if outputs is not None:
             self.post_process(trainer, pl_module, outputs)
