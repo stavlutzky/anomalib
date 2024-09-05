@@ -25,7 +25,7 @@ from anomalib.callbacks.normalization.base import NormalizationCallback
 from anomalib.callbacks.post_processor import _PostProcessorCallback
 from anomalib.callbacks.thresholding import _ThresholdCallback
 from anomalib.callbacks.timer import TimerCallback
-from anomalib.callbacks.visualizer import _VisualizationCallback
+from anomalib.callbacks.visualizer import _VisualizationCallback, VisualizationCallbackAnomalous
 from anomalib.data import AnomalibDataModule, AnomalibDataset, PredictDataset
 from anomalib.deploy import CompressionType, ExportType
 from anomalib.models import AnomalyModule
@@ -132,7 +132,7 @@ class Engine:
         default_root_dir: str | Path = "results",
         **kwargs,
     ) -> None:
-        print("print for cheack")
+        print("print for check")
         # TODO(ashwinvaidya17): Add model argument to engine constructor
         # https://github.com/openvinotoolkit/anomalib/issues/1639
         if callbacks is None:
@@ -314,7 +314,9 @@ class Engine:
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
         # 2. Update the default root directory
         root_dir = Path(self._cache.args["default_root_dir"]) / model.name / dataset_name / category
-        self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir / "latest"
+        # self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir / "latest"
+        self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir
+
 
     def _setup_trainer(self, model: AnomalyModule) -> None:
         """Instantiate the trainer based on the model parameters."""
@@ -435,7 +437,7 @@ class Engine:
         _callbacks.append(_MetricsCallback(self.task, self.image_metric_names, self.pixel_metric_names))
 
         _callbacks.append(
-            _VisualizationCallback(
+            VisualizationCallbackAnomalous(
                 visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
                 save=True,
                 root=self._cache.args["default_root_dir"] / "images",
