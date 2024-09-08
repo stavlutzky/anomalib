@@ -209,7 +209,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                         # Get the filename to save the image.
                         filename = Path(result.file_name).name
                         # save_image(image=result.image, root=self.root, filename=filename)
-                        save_image(image=result.image, root=self.root, filename=filename)
+                        save_image(image=result.image, root=self.root.joinpath("anomalous_images"), filename=filename)
 
                     if self.show:
                         show_image(image=result.image, title=str(result.file_name))
