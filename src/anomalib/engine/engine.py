@@ -313,7 +313,10 @@ class Engine:
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
         # 2. Update the default root directory
-        root_dir = Path(self._cache.args["default_root_dir"]) / model.name / dataset_name / category
+        # root_dir = Path(self._cache.args["default_root_dir"]) / model.name / dataset_name / category
+        root_dir = Path(self._cache.args["default_root_dir"]) / dataset_name / category
+        # str("/Results_invalid_prediction") + / dataset_name / category / model.name / Path(
+        #     self._cache.args["default_root_dir"])
         # self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir / "latest"
         self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir
 
@@ -440,7 +443,7 @@ class Engine:
             VisualizationCallbackAnomalous(
                 visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
                 save=True,
-                root=self._cache.args["default_root_dir"] / "images",
+                root=self._cache.args["default_root_dir"] ,
             ),
         )
 
