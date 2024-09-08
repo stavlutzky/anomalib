@@ -318,7 +318,7 @@ class Engine:
         # str("/Results_invalid_prediction") + / dataset_name / category / model.name / Path(
         #     self._cache.args["default_root_dir"])
         # self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir / "latest"
-        self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir
+        # self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir
 
 
     def _setup_trainer(self, model: AnomalyModule) -> None:
@@ -425,9 +425,8 @@ class Engine:
                     auto_insert_metric_name=False,
                 ),
             )
-
         # Add the post-processor callbacks.
-        _callbacks.append(_PostProcessorCallback(predict_path = str(self._cache.args['default_root_dir'])+ "\\results_batch_file"))
+        _callbacks.append(_PostProcessorCallback(predict_path = str(self._cache.args['default_root_dir'])))
         # _callbacks.append(_PostProcessorCallback())
 
         # Add the the normalization callback.

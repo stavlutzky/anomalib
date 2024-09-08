@@ -10,6 +10,7 @@ import torch
 from lightning import Callback
 from lightning.pytorch import Trainer
 from lightning.pytorch.utilities.types import STEP_OUTPUT
+from pathlib import Path
 
 from anomalib.data.utils import boxes_to_anomaly_maps, boxes_to_masks, masks_to_boxes
 from anomalib.models import AnomalyModule
@@ -78,17 +79,16 @@ class _PostProcessorCallback(Callback):
         # Create the file name with the timestamp
         file_name = f'output_{timestamp}.pkl'
 
-
         # Define the path and file name
-        full_path = self.predict_path+f'\\{file_name}'
-
+        full_path = Path(self.predict_path).joinpath(trainer.datamodule.name).joinpath(trainer.datamodule.category).joinpath("classfication_pickles")
+        # root = Path(full_path).joinpath("anomalous_images")
         # Create the directory if it doesn't exist
-        if not os.path.exists(self.predict_path):
-            os.makedirs(self.predict_path)
-            print(f"Directory '{self.predict_path}' created.")
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+            print(f"Directory '{full_path}' created.")
 
         # Open the file and write data to it
-        with open(full_path, 'wb') as file:
+        with open(full_path.joinpath(f"{file_name}"), 'wb') as file:
             pickle.dump(outputs, file)
             print(f"Data written to '{full_path}'.")
 

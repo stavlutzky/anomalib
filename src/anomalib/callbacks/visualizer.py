@@ -9,6 +9,7 @@ This is assigned by Anomalib Engine internally.
 import logging
 from pathlib import Path
 from typing import Any, cast
+from pathlib import Path
 
 from lightning.pytorch import Callback, Trainer
 from lightning.pytorch.utilities.types import STEP_OUTPUT
@@ -209,7 +210,10 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                         # Get the filename to save the image.
                         filename = Path(result.file_name).name
                         # save_image(image=result.image, root=self.root, filename=filename)
-                        save_image(image=result.image, root=Path(self.root).joinpath("anomalous_images"), filename=filename)
+                        full_path = Path(self.root).joinpath(trainer.datamodule.name).joinpath(
+                            trainer.datamodule.category).joinpath("anomalous_images")
+
+                        save_image(image=result.image, root=full_path, filename=filename)
 
                     if self.show:
                         show_image(image=result.image, title=str(result.file_name))
