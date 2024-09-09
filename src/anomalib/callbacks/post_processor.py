@@ -70,7 +70,6 @@ class _PostProcessorCallback(Callback):
         if outputs is not None:
             self.post_process(trainer, pl_module, outputs)
 
-        print("got here")
         from datetime import datetime
 
         # Get the current timestamp

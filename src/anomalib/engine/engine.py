@@ -132,7 +132,6 @@ class Engine:
         default_root_dir: str | Path = "results",
         **kwargs,
     ) -> None:
-        print("print for check")
         # TODO(ashwinvaidya17): Add model argument to engine constructor
         # https://github.com/openvinotoolkit/anomalib/issues/1639
         if callbacks is None:
