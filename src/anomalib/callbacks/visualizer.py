@@ -192,6 +192,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
         batch_idx: int,
         dataloader_idx: int = 0,
     ) -> None:
+        print("start VisualizationCallbackAnomalous")
         for generator in self.generators:
             if generator.visualize_on == VisualizationStep.BATCH:
                 for result in generator(
@@ -214,6 +215,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                             trainer.datamodule.category).joinpath("anomalous_images")
 
                         save_image(image=result.image, root=full_path, filename=filename)
+                        print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
 
                     if self.show:
                         show_image(image=result.image, title=str(result.file_name))

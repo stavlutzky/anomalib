@@ -65,34 +65,9 @@ class _PostProcessorCallback(Callback):
         dataloader_idx: int = 0,
     ) -> None:
         del batch, batch_idx, dataloader_idx  # Unused arguments.
-        print("Start Predict")
 
         if outputs is not None:
             self.post_process(trainer, pl_module, outputs)
-
-        from datetime import datetime
-
-        # Get the current timestamp
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-
-        # Create the file name with the timestamp
-        file_name = f'output_{timestamp}.pkl'
-
-        # Define the path and file name
-        full_path = Path(self.predict_path).joinpath(trainer.datamodule.name).joinpath(trainer.datamodule.category).joinpath("classfication_pickles")
-        # root = Path(full_path).joinpath("anomalous_images")
-        # Create the directory if it doesn't exist
-        if not os.path.exists(full_path):
-            os.makedirs(full_path)
-            print(f"Directory '{full_path}' created.")
-
-        # Open the file and write data to it
-        with open(full_path.joinpath(f"{file_name}"), 'wb') as file:
-            pickle.dump(outputs, file)
-            print(f"Data written to '{full_path}'.")
-
-        # with open(full_path, 'rb') as file:
-        #     data = pickle.load(file)
 
     def post_process(self, trainer: Trainer, pl_module: AnomalyModule, outputs: STEP_OUTPUT) -> None:
         if isinstance(outputs, dict):

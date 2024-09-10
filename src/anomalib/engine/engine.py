@@ -425,7 +425,7 @@ class Engine:
                 ),
             )
         # Add the post-processor callbacks.
-        _callbacks.append(_PostProcessorCallback(predict_path = str(self._cache.args['default_root_dir'])))
+        _callbacks.append(_PostProcessorCallback())
         # _callbacks.append(_PostProcessorCallback())
 
         # Add the the normalization callback.
