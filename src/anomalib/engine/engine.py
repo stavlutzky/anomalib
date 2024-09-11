@@ -437,13 +437,13 @@ class Engine:
         _callbacks.append(_ThresholdCallback(self.threshold))
         _callbacks.append(_MetricsCallback(self.task, self.image_metric_names, self.pixel_metric_names))
 
-        _callbacks.append(
-            VisualizationCallbackAnomalous(
-                visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
-                save=True,
-                root=self._cache.args["default_root_dir"] ,
-            ),
-        )
+        # _callbacks.append(
+        #     VisualizationCallbackAnomalous(
+        #         visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
+        #         save=True,
+        #         root=self._cache.args["default_root_dir"] ,
+        #     ),
+        # )
 
         _callbacks.append(TimerCallback())
 

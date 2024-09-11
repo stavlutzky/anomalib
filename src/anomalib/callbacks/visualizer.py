@@ -183,6 +183,13 @@ class _VisualizationCallback(Callback):
                 )
 
 class VisualizationCallbackAnomalous(_VisualizationCallback):
+
+    def __init__(self, results_path, dataset_name, category_name, experiment_name) -> None:
+        super().__init__()
+        self.results_path = results_path
+        self.dataset_name = dataset_name
+        self.category_name = category_name
+        self.experiment_name = experiment_name
     def on_predict_batch_end(
         self,
         trainer: Trainer,
@@ -211,8 +218,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                         # Get the filename to save the image.
                         filename = Path(result.file_name).name
                         # save_image(image=result.image, root=self.root, filename=filename)
-                        full_path = Path(self.root).joinpath(trainer.datamodule.name).joinpath(
-                            trainer.datamodule.category).joinpath("anomalous_images")
+                        full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
 
                         save_image(image=result.image, root=full_path, filename=filename)
                         print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
