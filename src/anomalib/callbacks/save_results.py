@@ -10,12 +10,12 @@ from datetime import datetime
 
 class SaveResults(Callback):
 
-    def __init__(self, results_path, dataset_name, category_name) -> None:
+    def __init__(self, results_path, dataset_name, category_name, experiment_name) -> None:
         super().__init__()
         self.results_path = results_path
         self.dataset_name = dataset_name
         self.category_name = category_name
-
+        self.experiment_name = experiment_name
     def on_predict_batch_end(
         self,
         trainer: Trainer,
@@ -34,7 +34,7 @@ class SaveResults(Callback):
         file_name = f'output_{timestamp}.pkl'
 
         # Define the path and file name
-        full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath("classfication_pickles")
+        full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath(self.experiment_name).joinpath("classfication_pickles")
         # Create the directory if it doesn't exist
         if not os.path.exists(full_path):
             os.makedirs(full_path)
