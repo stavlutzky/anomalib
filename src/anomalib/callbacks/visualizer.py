@@ -183,6 +183,18 @@ class _VisualizationCallback(Callback):
                 )
 
 class VisualizationCallbackAnomalous(_VisualizationCallback):
+    def __init__(self, visualizers: BaseVisualizer | list[BaseVisualizer],
+        dataset_name, category_name, experiment_name,
+        save: bool = False,
+        root: Path | None = None,
+        log: bool = False,
+        show: bool = False,
+         ) -> None:
+        super().__init__(visualizers, save, root, log, show)
+        self.dataset_name = dataset_name
+        self.category_name = category_name
+        self.experiment_name = experiment_name
+
     def on_predict_batch_end(
         self,
         trainer: Trainer,
@@ -203,7 +215,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                     batch_idx=batch_idx,
                     dataloader_idx=dataloader_idx,
                 ):
-                    if self.save and result.pred_label == 1:
+                    if result.pred_label == 1:
                         if result.file_name is None:
                             msg = "``save`` is set to ``True`` but file name is ``None``"
                             raise ValueError(msg)
@@ -211,8 +223,8 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                         # Get the filename to save the image.
                         filename = Path(result.file_name).name
                         # save_image(image=result.image, root=self.root, filename=filename)
-                        full_path = Path(self.root).joinpath(trainer.datamodule.name).joinpath(
-                            trainer.datamodule.category).joinpath("anomalous_images")
+                        full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
+                            self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
 
                         save_image(image=result.image, root=full_path, filename=filename)
                         print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")

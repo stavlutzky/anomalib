@@ -426,8 +426,6 @@ class Engine:
             )
         # Add the post-processor callbacks.
         _callbacks.append(_PostProcessorCallback())
-        # _callbacks.append(_PostProcessorCallback())
-
         # Add the the normalization callback.
         normalization_callback = get_normalization_callback(self.normalization)
         if normalization_callback is not None:
@@ -437,13 +435,14 @@ class Engine:
         _callbacks.append(_ThresholdCallback(self.threshold))
         _callbacks.append(_MetricsCallback(self.task, self.image_metric_names, self.pixel_metric_names))
 
-        # _callbacks.append(
-        #     VisualizationCallbackAnomalous(
-        #         visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
-        #         save=True,
-        #         root=self._cache.args["default_root_dir"] ,
-        #     ),
-        # )
+        _callbacks.append(
+            _VisualizationCallback(
+                visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
+                save=self._cache.args["save_images"] if 'save_images' in self._cache.args else True,
+                root=self._cache.args["default_root_dir"] ,
+            ),
+        )
+        self._cache.args.pop('save_images')
 
         _callbacks.append(TimerCallback())
 
