@@ -435,14 +435,17 @@ class Engine:
         _callbacks.append(_ThresholdCallback(self.threshold))
         _callbacks.append(_MetricsCallback(self.task, self.image_metric_names, self.pixel_metric_names))
 
+        save_images =False if any(isinstance(callback, VisualizationCallbackAnomalous) for callback in self._cache.args["callbacks"]) else True
+
         _callbacks.append(
             _VisualizationCallback(
                 visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
-                save=self._cache.args["save_images"] if 'save_images' in self._cache.args else True,
+                save= save_images,
                 root=self._cache.args["default_root_dir"] ,
             ),
         )
-        self._cache.args.pop('save_images')
+
+        # self._cache.args.pop('save_images')
 
         _callbacks.append(TimerCallback())
 
