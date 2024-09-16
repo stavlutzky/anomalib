@@ -34,7 +34,7 @@ class SaveResults(Callback):
         file_name = f'output_{timestamp}.pkl'
 
         # Define the path and file name
-        full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath(self.experiment_name).joinpath("classfication_pickles")
+        full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath(self.experiment_name).joinpath("classification_pickles")
         # Create the directory if it doesn't exist
         if not os.path.exists(full_path):
             os.makedirs(full_path)
