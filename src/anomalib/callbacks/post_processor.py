@@ -10,10 +10,12 @@ import torch
 from lightning import Callback
 from lightning.pytorch import Trainer
 from lightning.pytorch.utilities.types import STEP_OUTPUT
+from pathlib import Path
 
 from anomalib.data.utils import boxes_to_anomaly_maps, boxes_to_masks, masks_to_boxes
 from anomalib.models import AnomalyModule
-
+import os
+import pickle
 
 class _PostProcessorCallback(Callback):
     """Applies post-processing to the model outputs.
@@ -21,8 +23,9 @@ class _PostProcessorCallback(Callback):
     Note: This callback is set within the Engine.
     """
 
-    def __init__(self) -> None:
+    def __init__(self,predict_path=None) -> None:
         super().__init__()
+        self.predict_path = predict_path
 
     def on_validation_batch_end(
         self,

@@ -444,12 +444,17 @@ def save_image(filename: Path | str, image: np.ndarray | Figure, root: Path | No
         file_path = Path(*file_path.parts[2:])  # OS-AGNOSTIC
     if root:
         file_path = root / file_path
+        # file_path = root
+
 
     # Make unique file_path if file already exists
     file_path = duplicate_filename(file_path)
 
+    # file_path.parent.mkdir(parents=True, exist_ok=True)
     file_path.parent.mkdir(parents=True, exist_ok=True)
+
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    print(f"Image saved to :{str(file_path)}" )
     cv2.imwrite(str(file_path), image)
 
 

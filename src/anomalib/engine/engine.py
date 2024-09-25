@@ -25,7 +25,7 @@ from anomalib.callbacks.normalization.base import NormalizationCallback
 from anomalib.callbacks.post_processor import _PostProcessorCallback
 from anomalib.callbacks.thresholding import _ThresholdCallback
 from anomalib.callbacks.timer import TimerCallback
-from anomalib.callbacks.visualizer import _VisualizationCallback
+from anomalib.callbacks.visualizer import _VisualizationCallback, VisualizationCallbackAnomalous
 from anomalib.data import AnomalibDataModule, AnomalibDataset, PredictDataset
 from anomalib.deploy import CompressionType, ExportType
 from anomalib.models import AnomalyModule
@@ -312,8 +312,13 @@ class Engine:
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
         # 2. Update the default root directory
-        root_dir = Path(self._cache.args["default_root_dir"]) / model.name / dataset_name / category
-        self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir / "latest"
+        # root_dir = Path(self._cache.args["default_root_dir"]) / model.name / dataset_name / category
+        root_dir = Path(self._cache.args["default_root_dir"]) / dataset_name / category
+        # str("/Results_invalid_prediction") + / dataset_name / category / model.name / Path(
+        #     self._cache.args["default_root_dir"])
+        # self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir / "latest"
+        # self._cache.args["default_root_dir"] = create_versioned_dir(root_dir) if versioned_dir else root_dir
+
 
     def _setup_trainer(self, model: AnomalyModule) -> None:
         """Instantiate the trainer based on the model parameters."""
@@ -419,10 +424,8 @@ class Engine:
                     auto_insert_metric_name=False,
                 ),
             )
-
         # Add the post-processor callbacks.
         _callbacks.append(_PostProcessorCallback())
-
         # Add the the normalization callback.
         normalization_callback = get_normalization_callback(self.normalization)
         if normalization_callback is not None:
@@ -432,13 +435,17 @@ class Engine:
         _callbacks.append(_ThresholdCallback(self.threshold))
         _callbacks.append(_MetricsCallback(self.task, self.image_metric_names, self.pixel_metric_names))
 
+        save_images =False if any(isinstance(callback, VisualizationCallbackAnomalous) for callback in self._cache.args["callbacks"]) else True
+
         _callbacks.append(
             _VisualizationCallback(
                 visualizers=ImageVisualizer(task=self.task, normalize=self.normalization == NormalizationMethod.NONE),
-                save=True,
-                root=self._cache.args["default_root_dir"] / "images",
+                save= save_images,
+                root=self._cache.args["default_root_dir"] ,
             ),
         )
+
+        # self._cache.args.pop('save_images')
 
         _callbacks.append(TimerCallback())
 
