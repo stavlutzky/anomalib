@@ -227,7 +227,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                             self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
 
                         save_image(image=result.image, root=full_path, filename=filename)
-                        print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
+                        # print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
 
                     if self.show:
                         show_image(image=result.image, title=str(result.file_name))
