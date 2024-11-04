@@ -454,7 +454,7 @@ def save_image(filename: Path | str, image: np.ndarray | Figure, root: Path | No
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    print(f"Image saved to :{str(file_path)}" )
+    # print(f"Image saved to :{str(file_path)}" )
     cv2.imwrite(str(file_path), image)
 
 
