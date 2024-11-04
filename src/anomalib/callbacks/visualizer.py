@@ -204,7 +204,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
         batch_idx: int,
         dataloader_idx: int = 0,
     ) -> None:
-        print("start VisualizationCallbackAnomalous")
+        # print("start VisualizationCallbackAnomalous")
         for generator in self.generators:
             if generator.visualize_on == VisualizationStep.BATCH:
                 for result in generator(
