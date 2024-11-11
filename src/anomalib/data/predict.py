@@ -31,7 +31,7 @@ class PredictDataset(Dataset):
         image_size: int | tuple[int, int] = (256, 256),
     ) -> None:
         super().__init__()
-
+        print(f"TTTTT{path}")
         self.image_filenames = get_image_filenames(path)
         self.transform = transform
         self.image_size = image_size
