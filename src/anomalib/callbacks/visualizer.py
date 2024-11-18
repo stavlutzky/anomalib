@@ -223,8 +223,12 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                         # Get the filename to save the image.
                         filename = Path(result.file_name).name
                         # save_image(image=result.image, root=self.root, filename=filename)
-                        full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
-                            self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
+                        if self.experiment_name is None:
+                            full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
+                                self.category_name).joinpath("anomalous_images")
+                        else:
+                            full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
+                                self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
 
                         save_image(image=result.image, root=full_path, filename=filename)
                         # print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
