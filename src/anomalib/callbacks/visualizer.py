@@ -226,6 +226,7 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                         if self.experiment_name is None:
                             full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
                                 self.category_name).joinpath("anomalous_images")
+                            print(f"Visualizer:{full_path}")
                         else:
                             full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
                                 self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")

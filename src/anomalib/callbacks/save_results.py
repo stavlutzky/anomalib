@@ -36,6 +36,8 @@ class SaveResults(Callback):
         # Define the path and file name
         if self.experiment_name is None:
             full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath("classification_pickles")
+            print(f"Save:{full_path}")
+
         else:
             full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath(self.experiment_name).joinpath("classification_pickles")
         print(f"PKL:{full_path}")
