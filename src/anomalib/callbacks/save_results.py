@@ -60,6 +60,6 @@ class SaveResults(Callback):
                 'pred_boxes': [box.cpu().numpy() for box in outputs['pred_boxes']],
                 'box_scores': [score.cpu().numpy() for score in outputs['box_scores']],
                 'box_labels': [label.cpu().numpy() for label in outputs['box_labels']],
-                'image_path': outputs['image_path'].cpu().numpy()
+                'image_path': outputs['image_path'].numpy()
             }
             pickle.dump(data_dict, file)
