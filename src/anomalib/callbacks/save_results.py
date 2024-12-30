@@ -51,4 +51,14 @@ class SaveResults(Callback):
 
         # Open the file and write data to it
         with open(full_path.joinpath(f"{file_name}"), 'wb') as file:
-            pickle.dump(outputs, file)
+            data_dict = {
+                'image': outputs['image'].numpy(),
+                'anomaly_maps': outputs['anomaly_maps'].numpy(),
+                'pred_scores': outputs['pred_scores'].numpy(),
+                'pred_labels': outputs['pred_labels'].numpy(),
+                'pred_masks': outputs['pred_masks'].numpy(),
+                'pred_boxes': [box.numpy() for box in outputs['pred_boxes']],
+                'box_scores': [score.numpy() for score in outputs['box_scores']],
+                'box_labels': [label.numpy() for label in outputs['box_labels']]
+            }
+            pickle.dump(data_dict, file)
