@@ -51,16 +51,34 @@ class SaveResults(Callback):
 
         # Open the file and write data to it
         with open(full_path.joinpath(f"{file_name}"), 'wb') as file:
+            data_dict = {
+                'image': outputs['image'].cpu().numpy(),
+                'anomaly_maps': outputs['anomaly_maps'].cpu().numpy(),
+                'pred_scores': outputs['pred_scores'].cpu().numpy(),
+                'pred_labels': outputs['pred_labels'].cpu().numpy(),
+                'pred_masks': outputs['pred_masks'].cpu().numpy(),
+                'pred_boxes': [box.cpu().numpy() for box in outputs['pred_boxes']],
+                'box_scores': [score.cpu().numpy() for score in outputs['box_scores']],
+                'box_labels': [label.cpu().numpy() for label in outputs['box_labels']],
+                'image_path':outputs['pred_scores']
+            }
+            pickle.dump(data_dict, file)
+
+            # # Convert tensors to numpy arrays after moving them to the CPU
             # data_dict = {
-            #     'image': outputs['image'].cpu().numpy(),
-            #     'anomaly_maps': outputs['anomaly_maps'].cpu().numpy(),
-            #     'pred_scores': outputs['pred_scores'].cpu().numpy(),
-            #     'pred_labels': outputs['pred_labels'].cpu().numpy(),
-            #     'pred_masks': outputs['pred_masks'].cpu().numpy(),
-            #     'pred_boxes': [box.cpu().numpy() for box in outputs['pred_boxes']],
-            #     'box_scores': [score.cpu().numpy() for score in outputs['box_scores']],
-            #     'box_labels': [label.cpu().numpy() for label in outputs['box_labels']],
-            #     'image_path':outputs['pred_scores'].cpu().numpy()
+            #     'image': data['image'].cpu().numpy(),
+            #     'anomaly_maps': data['anomaly_maps'].cpu().numpy(),
+            #     'pred_scores': data['pred_scores'].cpu().numpy(),
+            #     'pred_labels': data['pred_labels'].cpu().numpy(),
+            #     'pred_masks': data['pred_masks'].cpu().numpy(),
+            #     'pred_boxes': [box.cpu().numpy() for box in data['pred_boxes']],
+            #     'box_scores': [score.cpu().numpy() for score in data['box_scores']],
+            #     'box_labels': [label.cpu().numpy() for label in data['box_labels']],
+            #     'image_path': data['image_path']  # Assuming this is already a list of strings
             # }
-            # pickle.dump(data_dict, file)
-            pickle.dump(outputs, file)
+            #
+            # # Save as pickle file
+            # with open('data.pkl', 'wb') as f:
+            #     pickle.dump(data_dict, f)
+
+            # pickle.dump(outputs, file)
