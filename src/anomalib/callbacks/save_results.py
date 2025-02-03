@@ -10,12 +10,13 @@ from datetime import datetime
 
 class SaveResults(Callback):
 
-    def __init__(self, results_path, dataset_name, category_name, experiment_name) -> None:
+    def __init__(self, results_path, dataset_name, category_name, experiment_name, model_name) -> None:
         super().__init__()
         self.results_path = results_path
         self.dataset_name = dataset_name
         self.category_name = category_name
         self.experiment_name = experiment_name
+        self.model_name = model_name
     def on_predict_batch_end(
         self,
         trainer: Trainer,
@@ -51,7 +52,8 @@ class SaveResults(Callback):
 
         # Open the file and write data to it
         with open(full_path.joinpath(f"{file_name}"), 'wb') as file:
-            data_dict = {
+            data_dict = \
+            {
                 'image': outputs['image'].cpu().numpy(),
                 'anomaly_maps': outputs['anomaly_maps'].cpu().numpy(),
                 'pred_scores': outputs['pred_scores'].cpu().numpy(),
@@ -60,7 +62,9 @@ class SaveResults(Callback):
                 'pred_boxes': [box.cpu().numpy() for box in outputs['pred_boxes']],
                 'box_scores': [score.cpu().numpy() for score in outputs['box_scores']],
                 'box_labels': [label.cpu().numpy() for label in outputs['box_labels']],
-                'image_path':outputs['image_path']
+                'image_path': outputs['image_path'],
+                'predict_time': datetime.now(),
+                'model_name' : self.model_name
             }
             pickle.dump(data_dict, file)
 
