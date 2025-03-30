@@ -215,24 +215,24 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                     batch_idx=batch_idx,
                     dataloader_idx=dataloader_idx,
                 ):
-                    if result.pred_label == 1:
-                        if result.file_name is None:
-                            msg = "``save`` is set to ``True`` but file name is ``None``"
-                            raise ValueError(msg)
+                    # if result.pred_label == 1: save only anomalies images  scope:218 to 234
+                    if result.file_name is None:
+                        msg = "``save`` is set to ``True`` but file name is ``None``"
+                        raise ValueError(msg)
 
-                        # Get the filename to save the image.
-                        filename = Path(result.file_name).name
-                        # save_image(image=result.image, root=self.root, filename=filename)
-                        if self.experiment_name is None:
-                            full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
-                                self.category_name).joinpath("anomalous_images")
-                            print(f"Visualizer:{full_path}")
-                        else:
-                            full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
-                                self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
+                    # Get the filename to save the image.
+                    filename = Path(result.file_name).name
+                    # save_image(image=result.image, root=self.root, filename=filename)
+                    if self.experiment_name is None:
+                        full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
+                            self.category_name).joinpath("anomalous_images")
+                        print(f"Visualizer:{full_path}")
+                    else:
+                        full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
+                            self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
 
-                        save_image(image=result.image, root=full_path, filename=filename)
-                        # print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
+                    save_image(image=result.image, root=full_path, filename=filename)
+                    # print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
 
                     if self.show:
                         show_image(image=result.image, title=str(result.file_name))
