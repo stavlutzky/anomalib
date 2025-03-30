@@ -5,7 +5,7 @@ This is assigned by Anomalib Engine internally.
 
 # Copyright (C) 2024 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
-
+from datetime import datetime
 import logging
 from pathlib import Path
 from typing import Any, cast
@@ -222,14 +222,18 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
 
                     # Get the filename to save the image.
                     filename = Path(result.file_name).name
+
+                    # Get the current date
+                    current_date = datetime.now().strftime("%Y-%m-%d")
+
                     # save_image(image=result.image, root=self.root, filename=filename)
                     if self.experiment_name is None:
                         full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
-                            self.category_name).joinpath("anomalous_images")
+                            self.category_name).joinpath("anomalous_images").joinpath(current_date)
                         print(f"Visualizer:{full_path}")
                     else:
                         full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
-                            self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images")
+                            self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images").joinpath(current_date)
 
                     save_image(image=result.image, root=full_path, filename=filename)
                     # print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
