@@ -229,11 +229,11 @@ class VisualizationCallbackAnomalous(_VisualizationCallback):
                     # save_image(image=result.image, root=self.root, filename=filename)
                     if self.experiment_name is None:
                         full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
-                            self.category_name).joinpath("anomalous_images").joinpath(current_date)
+                            self.category_name).joinpath("heatmap").joinpath(current_date)
                         print(f"Visualizer:{full_path}")
                     else:
                         full_path = Path(self.root).joinpath(self.dataset_name).joinpath(
-                            self.category_name).joinpath(self.experiment_name).joinpath("anomalous_images").joinpath(current_date)
+                            self.category_name).joinpath(self.experiment_name).joinpath("heatmap").joinpath(current_date)
 
                     save_image(image=result.image, root=full_path, filename=filename)
                     # print(f"*{result.file_name} Image saved to :{str(full_path)}/{filename}*/n")
