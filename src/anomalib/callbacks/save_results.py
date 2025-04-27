@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 from lightning import Callback
 from lightning.pytorch import Trainer
@@ -34,13 +35,15 @@ class SaveResults(Callback):
         # Create the file name with the timestamp
         file_name = f'output_{timestamp}.pkl'
 
+        # Get the current date
+        current_date = datetime.now().strftime("%Y-%m-%d")
         # Define the path and file name
         if self.experiment_name is None:
-            full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath("classification_pickles")
+            full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath("classification_pickles").joinpath(current_date)
             print(f"Save:{full_path}")
 
         else:
-            full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath(self.experiment_name).joinpath("classification_pickles")
+            full_path = Path(self.results_path).joinpath(self.dataset_name).joinpath(self.category_name).joinpath(self.experiment_name).joinpath("classification_pickles").joinpath(current_date)
         print(f"PKL:{full_path}")
         # print(self.results_path)
         # print(self.dataset_name)
